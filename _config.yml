@@ -185,7 +185,7 @@ plugins:
   - jekyll-gist
   - jekyll-feed
   - jemoji
-
+  - jekyll-pandoc-multiple-formats
 # mimic GitHub Pages with --safe
 whitelist:
   - jekyll-paginate

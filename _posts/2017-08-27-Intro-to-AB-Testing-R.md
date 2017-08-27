@@ -1,0 +1,207 @@
+---
+title: "A/B Testing Overview"
+output: html_notebook
+---
+
+The purpose of A/B testing is to determine through the use
+of statistical methods whether an experiment generates enough
+of a practically significant effect to support implementation.
+
+In this example, we'll pretend we are running a website that has
+made a change to the shopping cart checkout process. We want to know
+if the change we've introduced to a subset of our visitors has made
+a significant enough change to warrant implementing on our site.
+
+Let $$n = number of unique visitors$$ to our site, and
+$$X = the number of unique visitors that placed an order$$.
+
+Then $$\hat{p} = X / n$$, the probability of a checkout for a unique visitor
+
+The distribution of this event is binomial, in that either a unique visitor
+will have had a checkout (a success) or not (a failure).
+
+Because these events are independent and identically distributed, we should
+be able to compare our control-group with our experimental-group to see
+whether there is a significant change.
+
+If we assume a binomial distribution with a sufficient sample size,
+then we can use the normal distributions Z scores to help calculate
+a margin of error. A margin of error gives us the confidence interval
+for a point estimate.
+
+Our margin of error, $$m = Z * SE$$, where $$SE = \sqrt{\frac{\hat{p}(1 - \hat{p})}{N}}$$
+Our confidence interval would then be our sample estimate +/- the margin of error.
+
+We'll walk through a real example to help illustrate this now.
+
+## Sample Distributions
+
+Before running our experiment, our web-team provided us with these numbers for
+the previous month.
+
+We had 20,000 unique visitors, and of those 20,000 unique visitors, 3,000
+of them placed an order. We'd like to know what the probability of any
+unique visitor placing an order is.
+
+
+{% highlight r %}
+library(scales)
+x = 3000
+n = 20000
+p_hat <- x / n
+p_hat
+{% endhighlight %}
+
+
+
+{% highlight text %}
+## [1] 0.15
+{% endhighlight %}
+
+The point-estimate is 15%, but what is the margin of error for this estimate?
+OUr 20,000 unique visitors is only a sample of the entire population, so
+let's calculated our confidence interval, at 95% confidence.
+
+
+{% highlight r %}
+SE = sqrt(p_hat * (1 - p_hat) / n)
+m = qnorm(1 - 0.025) * SE
+lower = p_hat - m
+upper = p_hat + m
+paste("Lower bound: ", percent(lower),
+      "Upper bound: ", percent(upper))
+{% endhighlight %}
+
+
+
+{% highlight text %}
+## [1] "Lower bound:  14.5% Upper bound:  15.5%"
+{% endhighlight %}
+
+We can say with 95% confidence that our estimate for $$\hat{p}$$ is between
+14.5% and 15.5%
+
+## Hypothesis Testing
+
+Now that we have a baseline, let's perform our experiment and see
+if our experiment performs better than a control.
+
+The following month the web team gives us this data.
+
+$$X_{control} = 974$$
+$$N_{control} = 10,072$$
+$$X_{experiment} = 9886$$
+$$N_{experiment} = 1242$$
+
+The pooled probability $$\hat{p}_{pool}$$ is the overall probability of a click
+across both control and experiments: $$\frac{974 + 1242}{10072 + 9886}$$.
+
+
+{% highlight r %}
+x_ctrl <- 974
+n_ctrl <- 10072
+x_exp <- 1241
+n_exp <- 9886
+p_pool = (x_ctrl + x_exp) / (n_ctrl + n_exp)
+p_pool
+{% endhighlight %}
+
+
+
+{% highlight text %}
+## [1] 0.1109831
+{% endhighlight %}
+
+The standard error of the pool is:
+
+
+{% highlight r %}
+SEpool = sqrt(p_pool * (1-p_pool) * (1/n_exp + 1/n_ctrl))
+SEpool
+{% endhighlight %}
+
+
+
+{% highlight text %}
+## [1] 0.004447067
+{% endhighlight %}
+
+Now, we compare the probability estimates for both the control and the experiment.
+If the two estimates are the same (or the difference between the two is 0) then
+our experiment had no effect. However, if the difference is greater than 0, then our
+experiment had an effect.
+
+The trick is that when we're sampling from a distribution, we may sometimes get
+differences not due to experimentation but merely due to chance. We'll test
+for that using the margin of error and confidence intervals as before.
+
+
+{% highlight r %}
+p_exp = x_exp / n_exp
+p_ctrl = x_ctrl / n_ctrl
+d_hat = p_exp - p_ctrl
+percent(d_hat)
+{% endhighlight %}
+
+
+
+{% highlight text %}
+## [1] "2.88%"
+{% endhighlight %}
+
+The difference between our experiment and control is an increase of 2.88%.
+Let's compute the margin of error using the standard error.
+
+
+{% highlight r %}
+m = qnorm(1 - 0.025) * SEpool
+paste("Lower bound:", percent(d_hat - m),
+       "Upper bound:", percent(d_hat + m))
+{% endhighlight %}
+
+
+
+{% highlight text %}
+## [1] "Lower bound: 2.01% Upper bound: 3.75%"
+{% endhighlight %}
+
+With 95% confidence, we can say that there was an increase of 2.02% to 3.76%
+following this experiment.
+
+## The Easy Way
+
+What if we didn't remember all these formulas but still wanted an answer?
+Let's try to see if we can replicate what we just did
+
+
+{% highlight r %}
+prop.test(c(x_exp, x_ctrl), c(n_exp, n_ctrl), p = NULL)
+{% endhighlight %}
+
+
+
+{% highlight text %}
+##
+## 	2-sample test for equality of proportions with continuity
+## 	correction
+##
+## data:  c(x_exp, x_ctrl) out of c(n_exp, n_ctrl)
+## X-squared = 41.729, df = 1, p-value = 1.049e-10
+## alternative hypothesis: two.sided
+## 95 percent confidence interval:
+##  0.02001096 0.03764369
+## sample estimates:
+##     prop 1     prop 2
+## 0.12553105 0.09670373
+{% endhighlight %}
+
+There we go, in one line we've tested whether the two groups have the
+same probability as our null hypothesis. Our alternative hypothesis is that
+there is a statistically significant difference between the two.
+
+Looking at the summary results, we can see that the p-value is practically 0,
+which means there's a very low likelihood of seeing a difference that big
+merely due to chance. Further, we can see the confidence interval of the
+difference between the two groups to be between 2.0% and 3.8%, matching our
+results above. The sample estimates for each population is also given,
+with our experimental group at 12.6% and our control group at 9.7%.
