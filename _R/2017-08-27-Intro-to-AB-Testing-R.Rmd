@@ -3,6 +3,8 @@ title: "A/B Testing Overview"
 author: "Pedram Roshdinavid"
 date: '`r Sys.Date()`'
 output: html_notebook
+layout: single
+excerpt: An easy walkthrough of the basics of A/B testing, using R. 
 ---
 
 ## Overview and Definitions
@@ -34,15 +36,15 @@ Shown graphically:
 library(ggplot2)
 library(dplyr)
 df <- data_frame(p1 = pop_1, p2 = pop_2)
-ggplot(df) + 
-  geom_density(aes(p1, color = 'pop_1')) + 
-  geom_density(aes(p2, color = 'pop_2')) 
+ggplot(df) +
+  geom_density(aes(p1, color = 'pop_1')) +
+  geom_density(aes(p2, color = 'pop_2'))
 ```
 
 That difference is due to chance, and not because of an inherent difference
 in the population of the two samples. A/B Testing is all about trying to
 detect whether we've been able to have an effect on the population and to tease
-apart the size of that effect, if it exists. 
+apart the size of that effect, if it exists.
 
 ## A Little Demo
 
@@ -66,18 +68,18 @@ whether there is a significant difference.
 
 If we assume a binomial distribution with a sufficient sample size,
 then we can use the normal distributions Z-scores along with
-the standard error to help calculate a margin of error. 
+the standard error to help calculate a margin of error.
 
-A margin of error gives us the confidence interval for a point estimate. 
+A margin of error gives us the confidence interval for a point estimate.
 Because we are pulling a sample from a population, we can give a range
-for our point estimate with a certain level of confidence, say 95%. 
+for our point estimate with a certain level of confidence, say 95%.
 
 What this means is that 95% of the time, the actual population mean will be within
 the confidence interval we provided, assuming a normal distribution (of course).
 
 Our margin of error is $m = Z * SE$
 and $SE = \sqrt{\frac{\hat{p}(1 - \hat{p})}{N}}$
-Our confidence interval would then be our sample estimate +/- the 
+Our confidence interval would then be our sample estimate +/- the
 margin of error.
 
 We'll walk through a real example to help illustrate this now.
@@ -87,7 +89,7 @@ We'll walk through a real example to help illustrate this now.
 Before running our experiment, our web-team provided us with these numbers for
 the previous month. This is only to get us familiar with some concepts,
 and we'll be performing the actual test next month, so the results aren't
-as important as the concepts here. 
+as important as the concepts here.
 
 We had 20,000 unique visitors, and of those 20,000 unique visitors, 3,000
 of them placed an order. We'd like to know what the probability of any
@@ -114,8 +116,8 @@ paste("Lower bound: ", percent(lower),
       "Upper bound: ", percent(upper))
 ```
 
-Our estimate for the true probability of an order, with 95% confidence, 
-is 14.5% to 15.5%. 
+Our estimate for the true probability of an order, with 95% confidence,
+is 14.5% to 15.5%.
 
 ## Hypothesis Testing
 
@@ -138,7 +140,7 @@ $$N_{experiment} = 1,242$$
 We'll need the stanard error for these two measures. One easy way to get
 the standard error is to pool the results together and get an overall
 probability of a click, and use that number to get what is called a pooled
-standard error. 
+standard error.
 
 The pooled probability $\hat{p}_{pool}$ is the overall probability of a click
 across both control and experiments: $\frac{974 + 1242}{10072 + 9886}$.
@@ -152,7 +154,7 @@ p_pool = (x_ctrl + x_exp) / (n_ctrl + n_exp)
 p_pool
 ```
 
-The standard error of the pool is: 
+The standard error of the pool is:
 
 $$ \sqrt{\hat{P}_{pool} * (1 - \hat{P}_{pool}) * (\frac{1}{N_{ctrl}} + \frac{1}{Nexp})} $$
 
@@ -169,7 +171,7 @@ then we'll have to conclude our experiment had no observable effect. If, however
 the bounds of the confidence intervals are separated, then we'll be able to say
 with a certain degree of confidence that there is a measurable effect.
 
-In other words, we're looking at two distributions, $ d_{experiment} $ and $ d_{control} $, and calculating whether $ \hat{d} = d_{experiment} - d_{control} = 0 $, where $ \hat{d} $ is the difference between the two distributions. 
+In other words, we're looking at two distributions, $ d_{experiment} $ and $ d_{control} $, and calculating whether $ \hat{d} = d_{experiment} - d_{control} = 0 $, where $ \hat{d} $ is the difference between the two distributions.
 
 
 ```{r}
@@ -192,7 +194,7 @@ paste("Lower bound:", percent(d_hat - m),
 ```
 
 With 95% confidence, we can say that there was an increase of 2.0% to 3.8%
-following this experiment. Since the margin of error is a safe distance away 
+following this experiment. Since the margin of error is a safe distance away
 from 0%, we can conclude with some confidence that our experiment is a success.
 
 ## The Easy Way
