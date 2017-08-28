@@ -1,6 +1,14 @@
 <script src="{{ '/assets/js/main.min.js' | absolute_url }}"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
 <script type="text/javascript" async
-  src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?...">
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
 </script>
 {% include analytics.html %}
 {% include /comments-providers/scripts.html %}
