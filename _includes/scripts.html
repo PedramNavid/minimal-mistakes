@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <script src="{{ '/assets/js/main.min.js' | absolute_url }}"></script>
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({
@@ -10,5 +11,20 @@
 <script type="text/javascript" async
   src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
 </script>
+=======
+{% if site.footer_scripts %}
+  {% for script in site.footer_scripts %}
+    {% if script contains "://" %}
+      {% capture script_path %}{{ script }}{% endcapture %}
+    {% else %}
+      {% capture script_path %}{{ script | absolute_url }}{% endcapture %}
+    {% endif %}
+    <script src="{{ script_path }}"></script>
+  {% endfor %}
+{% else %}
+  <script src="{{ '/assets/js/main.min.js' | absolute_url }}"></script>
+{% endif %}
+
+>>>>>>> upstream/master
 {% include analytics.html %}
 {% include /comments-providers/scripts.html %}
