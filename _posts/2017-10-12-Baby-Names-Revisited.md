@@ -3,11 +3,14 @@ layout: single
 title: "Baby Name Trends, Revisited"
 description: "The latest in baby naming trends"
 output: html_document
-date: '2017-10-12'
+date: 2017-10-12
 category: r
 tags: [r, baby names]
 comments: true
+
 ---
+
+
 
 I often get asked by co-op students at work about how they can get started with
 using R. While sites like Kaggle are great for finding lots of datasets and
@@ -84,13 +87,13 @@ summary(babynames)
 
 
 {% highlight text %}
-##       Year          Name             Frequency          Gender
-##  Min.   :1917   Length:157818      Min.   :   5.00   Female:87585
-##  1st Qu.:1958   Class :character   1st Qu.:   7.00   Male  :70233
-##  Median :1982   Mode  :character   Median :  13.00
-##  Mean   :1977                      Mean   :  63.78
-##  3rd Qu.:2000                      3rd Qu.:  37.00
-##  Max.   :2013                      Max.   :3946.00
+##       Year          Name             Frequency          Gender     
+##  Min.   :1917   Length:157818      Min.   :   5.00   Female:87585  
+##  1st Qu.:1958   Class :character   1st Qu.:   7.00   Male  :70233  
+##  Median :1982   Mode  :character   Median :  13.00                 
+##  Mean   :1977                      Mean   :  63.78                 
+##  3rd Qu.:2000                      3rd Qu.:  37.00                 
+##  Max.   :2013                      Max.   :3946.00                 
 ##                                    NA's   :2
 {% endhighlight %}
 
@@ -137,12 +140,12 @@ summary(babynames)
 
 
 {% highlight text %}
-##       Year          Name             Frequency          Gender
-##  Min.   :1917   Length:157818      Min.   :   5.00   Female:87585
-##  1st Qu.:1958   Class :character   1st Qu.:   7.00   Male  :70233
-##  Median :1982   Mode  :character   Median :  13.00
-##  Mean   :1977                      Mean   :  63.77
-##  3rd Qu.:2000                      3rd Qu.:  37.00
+##       Year          Name             Frequency          Gender     
+##  Min.   :1917   Length:157818      Min.   :   5.00   Female:87585  
+##  1st Qu.:1958   Class :character   1st Qu.:   7.00   Male  :70233  
+##  Median :1982   Mode  :character   Median :  13.00                 
+##  Mean   :1977                      Mean   :  63.77                 
+##  3rd Qu.:2000                      3rd Qu.:  37.00                 
 ##  Max.   :2013                      Max.   :3946.00
 {% endhighlight %}
 
@@ -185,7 +188,7 @@ g <- gghighlight_line(last_count, aes(Year, Prop, color = Last_Letter),
 g
 {% endhighlight %}
 
-![center](/figs/2017-10-12-Baby-Names-Revisited/unnamed-chunk-5-1.png)
+<img src="/figs/2017-10-12-Baby-Names-Revisited/unnamed-chunk-5-1.png" title="center" alt="center" width="80%" style="display: block; margin: auto;" />
 
 The trend is pretty interesting. With Females, names that end in -A have
 skyrocketed, the explosion starting in the early 60s, just as names ending in -E
@@ -221,7 +224,7 @@ g +
                   data = last_letter_labels, nudge_x = -10, size = 3)
 {% endhighlight %}
 
-![center](/figs/2017-10-12-Baby-Names-Revisited/unnamed-chunk-6-1.png)
+<img src="/figs/2017-10-12-Baby-Names-Revisited/unnamed-chunk-6-1.png" title="center" alt="center" width="80%" style="display: block; margin: auto;" />
 
 ### The Snowflake Effect
 
@@ -245,7 +248,7 @@ ggplot(snowflakes, aes(Year, Prop, color = Gender)) +
        caption = source)
 {% endhighlight %}
 
-![center](/figs/2017-10-12-Baby-Names-Revisited/unnamed-chunk-7-1.png)
+<img src="/figs/2017-10-12-Baby-Names-Revisited/unnamed-chunk-7-1.png" title="center" alt="center" width="80%" style="display: block; margin: auto;" />
 
 
 {% highlight r %}
@@ -267,7 +270,7 @@ inner_join(name_year_count, first_name_occurence) %>%
        caption = source)
 {% endhighlight %}
 
-![center](/figs/2017-10-12-Baby-Names-Revisited/unnamed-chunk-8-1.png)
+<img src="/figs/2017-10-12-Baby-Names-Revisited/unnamed-chunk-8-1.png" title="center" alt="center" width="80%" style="display: block; margin: auto;" />
 
 ### Gender Neutral
 
@@ -292,7 +295,7 @@ gendered_names %>%
        caption = source)
 {% endhighlight %}
 
-![center](/figs/2017-10-12-Baby-Names-Revisited/unnamed-chunk-9-1.png)
+<img src="/figs/2017-10-12-Baby-Names-Revisited/unnamed-chunk-9-1.png" title="center" alt="center" width="80%" style="display: block; margin: auto;" />
 
 We can see that starting in the mid-80s, there's been a sharp rise in gender
 neutral names, however that trend seems to have peaked in 2008, and decreasing
