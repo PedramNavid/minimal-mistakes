@@ -4,7 +4,9 @@ author: "Pedram Roshdinavid"
 date: '2017-08-27'
 output: html_notebook
 layout: single
-excerpt: An easy walkthrough of the basics of A/B testing, using R. 
+excerpt: An easy walkthrough of the basics of A/B testing, using R.
+category: data_science
+tags: [data science, ab, testing, stats]
 ---
 
 ## Overview and Definitions
@@ -273,17 +275,17 @@ prop.test(c(x_exp, x_ctrl), c(n_exp, n_ctrl), p = NULL)
 
 
 {% highlight text %}
-## 
+##
 ## 	2-sample test for equality of proportions with continuity
 ## 	correction
-## 
+##
 ## data:  c(x_exp, x_ctrl) out of c(n_exp, n_ctrl)
 ## X-squared = 41.729, df = 1, p-value = 1.049e-10
 ## alternative hypothesis: two.sided
 ## 95 percent confidence interval:
 ##  0.02001096 0.03764369
 ## sample estimates:
-##     prop 1     prop 2 
+##     prop 1     prop 2
 ## 0.12553105 0.09670373
 {% endhighlight %}
 
